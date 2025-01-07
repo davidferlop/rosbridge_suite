@@ -116,6 +116,8 @@ class MultiSubscriber:
         )
 
         infos = node_handle.get_publishers_info_by_topic(topic)
+        if infos:
+            qos.depth = max([10, max(pub.qos_profile.depth for pub in infos)])
         if any(pub.qos_profile.durability == DurabilityPolicy.TRANSIENT_LOCAL for pub in infos):
             qos.durability = DurabilityPolicy.TRANSIENT_LOCAL
         if any(pub.qos_profile.reliability == ReliabilityPolicy.BEST_EFFORT for pub in infos):
